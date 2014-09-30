@@ -4,7 +4,7 @@
 
     <groupId>com.porch</groupId>
     <artifactId>dropwizard-views-handlebars</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.7.1</version>
 
     <properties>
         <dropwizard.version>0.7.1</dropwizard.version>
@@ -53,6 +53,8 @@
         </profile>
     </profiles>
 
+    <description>Handlebars Templating for Dropwizard</description>
+
 
     <licenses>
         <license>
@@ -78,6 +80,16 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <developers>
+        <developer>
+            <id>mike</id>
+            <name>Mike Danese</name>
+            <email>mikedanese@gmail.com</email>
+        </developer>
+    </developers>
+
+    <url>https://github.com/porchdotcom/dropwizard-views-handlebars</url>
 
     <dependencies>
         <dependency>
