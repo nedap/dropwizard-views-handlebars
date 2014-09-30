@@ -1,6 +1,7 @@
 package io.dward.views.handlebars;
 
 import com.codahale.metrics.MetricRegistry;
+import com.porch.views.handlebars.HandlebarsViewRenderer;
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.logging.LoggingFactory;
 import io.dropwizard.views.ViewMessageBodyWriter;
