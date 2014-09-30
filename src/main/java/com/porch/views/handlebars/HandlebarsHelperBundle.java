@@ -1,4 +1,4 @@
-package io.dward.views.handlebars;
+package com.porch.views.handlebars;
 
 import com.github.jknack.handlebars.Helper;
 import io.dropwizard.Configuration;

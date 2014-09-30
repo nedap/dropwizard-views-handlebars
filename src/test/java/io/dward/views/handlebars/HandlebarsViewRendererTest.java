@@ -1,6 +1,7 @@
 package io.dward.views.handlebars;
 
 import com.codahale.metrics.MetricRegistry;
+import com.porch.views.handlebars.HandlebarsViewRenderer;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.core.DefaultResourceConfig;
