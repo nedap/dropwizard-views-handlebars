@@ -22,7 +22,7 @@ import io.dropwizard.setup.Environment;
  *          setPrettyPrint(true);
  *      }
  * }
- * }</pre>
+ * </pre>
  * <p/>
  */
 public abstract class HandlebarsHelperBundle<C extends Configuration> implements ConfiguredBundle<C> {
