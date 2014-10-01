@@ -15,7 +15,7 @@ Releases versions correspond with compatible version of Dropwizard and are publi
 </dependency>
 ```
 
-`dropwizard-views-mustache` also exposes the Handlebars.java Helper API and certain configurations through the [HandlebarsHelperBundler](src/main/java/com/porch/views/handlebars/HandlebarsHelperBundle.java).
+`dropwizard-views-handlebars` also exposes the Handlebars.java Helper API and certain configurations through the [HandlebarsHelperBundler](src/main/java/com/porch/views/handlebars/HandlebarsHelperBundle.java).
 
 ```java
 public class HelperBundle extends HandlebarsHelperBundler<Configuration> {
