@@ -1,7 +1,6 @@
-package io.dward.views.handlebars;
+package com.porch.views.handlebars;
 
 import com.codahale.metrics.MetricRegistry;
-import com.porch.views.handlebars.HandlebarsViewRenderer;
 import com.google.common.collect.ImmutableList;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.core.DefaultResourceConfig;
@@ -19,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class HandlebarsViewRendererTest extends JerseyTest {
     static {
@@ -33,6 +33,10 @@ public class HandlebarsViewRendererTest extends JerseyTest {
         public AbsoluteView showAbsolute() {
             return new AbsoluteView("yay");
         }
+
+        @GET
+        @Path("/partialsuffix")
+        public PartialWithSuffixView showNoSuffix() { return new PartialWithSuffixView();}
 
         @GET
         @Path("/relative")
@@ -51,6 +55,10 @@ public class HandlebarsViewRendererTest extends JerseyTest {
         public PartialView showPartial() {
             return new PartialView();
         }
+
+        @GET
+        @Path("/compilation")
+        public InvalidCompilationView showCompilation() { return new InvalidCompilationView(); }
     }
 
     @Override
@@ -58,6 +66,7 @@ public class HandlebarsViewRendererTest extends JerseyTest {
         final DefaultResourceConfig config = new DefaultResourceConfig();
         final ViewRenderer renderer = new HandlebarsViewRenderer();
         config.getSingletons().add(new ViewMessageBodyWriter(new MetricRegistry(), ImmutableList.of(renderer)));
+        config.getSingletons().add(new HandlebarsErrorMessageWriter());
         config.getSingletons().add(new ExampleResource());
         return new LowLevelAppDescriptor.Builder(config).build();
     }
@@ -68,6 +77,7 @@ public class HandlebarsViewRendererTest extends JerseyTest {
         assertThat(response)
                 .isEqualTo("Woop woop. yay" + System.lineSeparator());
     }
+
 
     @Test
     public void rendersViewsWithRelativeTemplatePaths() throws Exception {
@@ -80,6 +90,7 @@ public class HandlebarsViewRendererTest extends JerseyTest {
     public void returnsA500ForViewsWithBadTemplatePaths() throws Exception {
         try {
             client().resource(getBaseURI() + "test/bad").get(String.class);
+            fail();
         } catch (UniformInterfaceException e) {
             assertThat(e.getResponse().getStatus())
                     .isEqualTo(500);
@@ -90,8 +101,29 @@ public class HandlebarsViewRendererTest extends JerseyTest {
     }
 
     @Test
+    public void returnsA500ForCompilationFailures() throws Exception {
+        try {
+            client().resource(getBaseURI() + "test/compilation").get(String.class);
+            fail();
+        } catch (UniformInterfaceException e) {
+            assertThat(e.getResponse().getStatus())
+                    .isEqualTo(500);
+
+            assertThat(e.getResponse().getEntity(String.class))
+                    .contains("Error Compiling Template");
+        }
+    }
+
+    @Test
     public void testPartialsComposePerHandlebarsSpec() {
         assertThat(client().resource(getBaseURI() + "test/partial").get(String.class))
                 .isEqualTo("<h1>Base</h1><p>Partial</p>");
+    }
+
+
+    @Test
+    public void testPartialsWorkWithSuffix() {
+        assertThat(client().resource(getBaseURI() + "test/partialsuffix").get(String.class))
+                .isEqualTo("<h1>Base</h1><p>Partial Suffix</p>");
     }
 }
