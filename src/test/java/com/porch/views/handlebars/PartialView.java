@@ -1,4 +1,4 @@
-package io.dward.views.handlebars;
+package com.porch.views.handlebars;
 
 import io.dropwizard.views.View;
 
