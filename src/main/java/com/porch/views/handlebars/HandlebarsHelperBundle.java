@@ -19,9 +19,9 @@ import java.util.List;
  * of Handlebars Helpers on application initialization. The body of {@link #run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}
  * should contain any initialization of Handlebars helpers. Register these helpers with
  * {@link #registerHelper(String, com.github.jknack.handlebars.Helper)}.
- * <p/>
+ * <p>
  * Example :
- * <p/>
+ * </p>
  * <pre> {@code
  * public class HelperBundle extends HandlebarsHelperBundler<Configuration> {
  *      public void run(Configuration config, Environment environment) {
@@ -30,8 +30,9 @@ import java.util.List;
  *          setPrettyPrint(true);
  *      }
  * }
+ * }
  * </pre>
- * <p/>
+ * </p>
  */
 public abstract class HandlebarsHelperBundle<C extends Configuration> implements ConfiguredBundle<C> {
 
