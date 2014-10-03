@@ -18,13 +18,13 @@ Releases versions correspond with compatible version of Dropwizard and are publi
 `dropwizard-views-handlebars` also exposes the Handlebars.java Helper API and certain configurations through the [HandlebarsHelperBundler](src/main/java/com/porch/views/handlebars/HandlebarsHelperBundle.java).
 
 ```java
-public class HelperBundle extends HandlebarsHelperBundler<Configuration> {
-    public void configureHandlebars(Configuration config) {
-        DateHelper dateHelper = new DateHelper(config.getTimeZone());
-        registerHelper("date", dateHelper);
-        setPrettyPrint(true);
-    }
-}
+ public class HelperBundle extends HandlebarsHelperBundler<Configuration> {
+      public void run(Configuration config, Environment environment) {
+          DateHelper dateHelper = new DateHelper(config.getTimeZone());
+          handlebars().registerHelper("date", dateHelper);
+          handlebars().setPrettyPrint(true);
+      }
+ }
 ```
 
 Then  add the `HelperBundle` in the `initialize` method of your Application class.
