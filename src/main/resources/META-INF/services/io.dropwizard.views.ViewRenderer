@@ -1,1 +1,1 @@
-porch.views.handlebars.HandlebarsViewRenderer
+com.porch.views.handlebars.HandlebarsViewRenderer
