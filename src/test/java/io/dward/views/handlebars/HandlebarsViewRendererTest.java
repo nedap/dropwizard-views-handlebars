@@ -1,13 +1,14 @@
 package io.dward.views.handlebars;
 
 import com.codahale.metrics.MetricRegistry;
-import com.porch.views.handlebars.HandlebarsViewRenderer;
 import com.google.common.collect.ImmutableList;
-import io.dropwizard.logging.LoggingFactory;
+import com.porch.views.handlebars.HandlebarsViewRenderer;
+import io.dropwizard.logging.BootstrapLogging;
 import io.dropwizard.views.ViewMessageBodyWriter;
 import io.dropwizard.views.ViewRenderer;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.TestProperties;
 import org.junit.Test;
 
 import javax.ws.rs.GET;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class HandlebarsViewRendererTest extends JerseyTest {
     static {
-        LoggingFactory.bootstrap();
+        BootstrapLogging.bootstrap();
     }
 
     @Path("/test/")
@@ -55,6 +56,7 @@ public class HandlebarsViewRendererTest extends JerseyTest {
 
     @Override
     protected Application configure() {
+        forceSet(TestProperties.CONTAINER_PORT, "0");
         ResourceConfig config = new ResourceConfig();
         final ViewRenderer renderer = new HandlebarsViewRenderer();
         config.register(new ViewMessageBodyWriter(new MetricRegistry(), ImmutableList.of(renderer)));
@@ -65,13 +67,15 @@ public class HandlebarsViewRendererTest extends JerseyTest {
     @Test
     public void rendersViewsWithAbsoluteTemplatePaths() throws Exception {
         final String response = target("/test/absolute").request().get(String.class);
-        assertThat(response).isEqualTo("Woop woop. yay");
+        assertThat(response)
+                .isEqualTo("Woop woop. yay");
     }
 
     @Test
     public void rendersViewsWithRelativeTemplatePaths() throws Exception {
         final String response = target("/test/relative").request().get(String.class);
-        assertThat(response).isEqualTo("Ok.");
+        assertThat(response)
+                .isEqualTo("Ok.");
     }
 
     @Test
@@ -84,7 +88,7 @@ public class HandlebarsViewRendererTest extends JerseyTest {
                     .isEqualTo(500);
 
             assertThat(e.getResponse().readEntity(String.class))
-                    .isEqualTo("<html><head><title>Missing Template</title></head><body><h1>Missing Template</h1><p>Template /woo-oo-ahh.txt.hbs not found.</p></body></html>");
+                    .isEqualTo("<html><head><title>Missing Template</title></head><body><h1>Missing Template</h1><p>Template \"/woo-oo-ahh.txt.hbs\" not found.</p></body></html>");
         }
     }
 
@@ -93,4 +97,5 @@ public class HandlebarsViewRendererTest extends JerseyTest {
         assertThat(target("/test/partial").request().get(String.class))
                 .isEqualTo("<h1>Base</h1><p>Partial</p>");
     }
+    
 }

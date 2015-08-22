@@ -8,9 +8,9 @@
     <version>${dropwizard.version}</version>
 
     <properties>
-        <dropwizard.version>0.8.0-SNAPSHOT</dropwizard.version>
-        <handlebars.java.version>1.3.2</handlebars.java.version>
-        <jersey.version>2.11</jersey.version>
+        <dropwizard.version>0.9.0-rc3</dropwizard.version>
+        <handlebars.java.version>2.2.3</handlebars.java.version>
+        <jersey.version>2.21</jersey.version>
     </properties>
 
     <name>Dropwizard Handlebars Views</name>

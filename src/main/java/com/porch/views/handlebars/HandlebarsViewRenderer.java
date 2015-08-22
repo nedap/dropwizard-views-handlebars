@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -68,5 +69,15 @@ public class HandlebarsViewRenderer implements ViewRenderer {
         } catch (FileNotFoundException | ExecutionException e) {
             throw new FileNotFoundException("Template " + view.getTemplateName() + " not found.");
         }
+    }
+
+    @Override
+    public void configure(Map<String, String> map) {
+
+    }
+
+    @Override
+    public String getSuffix() {
+        return "hbs";
     }
 }
