@@ -50,7 +50,7 @@ public class HandlebarsViewRenderer implements ViewRenderer {
     /**
      * Exposed for use in {@link HandlebarsHelperBundle} for miscellaneous configuration.
      */
-    static final Handlebars HANDLEBARS = new Handlebars()
+    public static final Handlebars HANDLEBARS = new Handlebars()
             .with(new GuavaTemplateCache(templateCache));
 
     public HandlebarsViewRenderer() {
