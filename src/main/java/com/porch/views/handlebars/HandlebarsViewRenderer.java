@@ -40,7 +40,7 @@ public class HandlebarsViewRenderer implements ViewRenderer {
      */
     @VisibleForTesting
     LoadingCache<String, Template> compilationCache = CacheBuilder
-            .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
+            .newBuilder()
             .build(new CacheLoader<String, Template>() {
                 @Override
                 public Template load(String srcUrl) throws Exception {
@@ -80,7 +80,7 @@ public class HandlebarsViewRenderer implements ViewRenderer {
     public void configure(Map<String, String> map) {
         if(map.containsKey("cache") && map.get("cache").equals("false")) {
             compilationCache = CacheBuilder
-                    .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
+                    .newBuilder().expireAfterWrite(10, TimeUnit.MILLISECONDS)
                     .build(new CacheLoader<String, Template>() {
                         @Override
                         public Template load(String srcUrl) throws Exception {
@@ -88,7 +88,7 @@ public class HandlebarsViewRenderer implements ViewRenderer {
                         }
                     });
             templateCache = CacheBuilder
-                    .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
+                    .newBuilder().expireAfterWrite(10, TimeUnit.MILLISECONDS)
                     .build();
         }
 
