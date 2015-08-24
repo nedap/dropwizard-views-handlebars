@@ -22,6 +22,7 @@ import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A {@link ViewRenderer} which renders Handlebars ({@code .hbs}) templates.
@@ -30,7 +31,7 @@ public class HandlebarsViewRenderer implements ViewRenderer {
     /**
      * For use by Handlebars.java internally.
      */
-    private static final Cache<TemplateSource, Template> templateCache = CacheBuilder
+    private Cache<TemplateSource, Template> templateCache = CacheBuilder
             .newBuilder()
             .build();
 
@@ -38,22 +39,26 @@ public class HandlebarsViewRenderer implements ViewRenderer {
      * Handlebars.java does not cache reads of Template content from resources.
      */
     @VisibleForTesting
-    static final LoadingCache<String, Template> compilationCache = CacheBuilder
-            .newBuilder()
+    LoadingCache<String, Template> compilationCache = CacheBuilder
+            .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
             .build(new CacheLoader<String, Template>() {
                 @Override
                 public Template load(String srcUrl) throws Exception {
-                    return HANDLEBARS.compile(srcUrl.replaceAll(".hbs$", ""));
+                    return handlebars.compile(srcUrl.replaceAll(".hbs$", ""));
                 }
             });
 
     /**
      * Exposed for use in {@link HandlebarsHelperBundle} for miscellaneous configuration.
      */
-    public static final Handlebars HANDLEBARS = new Handlebars()
+    public Handlebars handlebars = new Handlebars()
             .with(new GuavaTemplateCache(templateCache));
 
     public HandlebarsViewRenderer() {
+    }
+
+    public Handlebars getHandlebars() {
+        return handlebars;
     }
 
     @Override
@@ -73,6 +78,19 @@ public class HandlebarsViewRenderer implements ViewRenderer {
 
     @Override
     public void configure(Map<String, String> map) {
+        if(map.containsKey("cache") && map.get("cache").equals("false")) {
+            compilationCache = CacheBuilder
+                    .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
+                    .build(new CacheLoader<String, Template>() {
+                        @Override
+                        public Template load(String srcUrl) throws Exception {
+                            return handlebars.compile(srcUrl.replaceAll(".hbs$", ""));
+                        }
+                    });
+            templateCache = CacheBuilder
+                    .newBuilder().expireAfterWrite(100, TimeUnit.MILLISECONDS)
+                    .build();
+        }
 
     }
 

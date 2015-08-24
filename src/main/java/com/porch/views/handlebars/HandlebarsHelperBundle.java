@@ -27,8 +27,14 @@ import io.dropwizard.setup.Environment;
  */
 public abstract class HandlebarsHelperBundle<C extends Configuration> implements ConfiguredBundle<C> {
 
+    private final HandlebarsViewRenderer viewRenderer;
+
     protected abstract void configureHandlebars(C configuration);
 
+    public HandlebarsHelperBundle(HandlebarsViewRenderer renderer) {
+        this.viewRenderer = renderer;
+    }
+    
     @Override
     public final void initialize(Bootstrap<?> bootstrap) {/* empty */}
 
@@ -40,28 +46,28 @@ public abstract class HandlebarsHelperBundle<C extends Configuration> implements
     /**
      * {@link com.github.jknack.handlebars.Handlebars#registerHelperMissing(com.github.jknack.handlebars.Helper)}
      */
-    public static <H> void registerHelperMissing(Helper<H> helper) {
-        HandlebarsViewRenderer.HANDLEBARS.registerHelperMissing(helper);
+    public <H> void registerHelperMissing(Helper<H> helper) {
+        viewRenderer.getHandlebars().registerHelperMissing(helper);
     }
 
     /**
      * {@link com.github.jknack.handlebars.Handlebars#registerHelper(String, com.github.jknack.handlebars.Helper)}
      */
-    public static <H> void registerHelper(String name, Helper<H> helper) {
-        HandlebarsViewRenderer.HANDLEBARS.registerHelper(name, helper);
+    public <H> void registerHelper(String name, Helper<H> helper) {
+        viewRenderer.getHandlebars().registerHelper(name, helper);
     }
 
     /**
      * {@link com.github.jknack.handlebars.Handlebars#setPrettyPrint(boolean)}
      */
-    public static void setPrettyPrint(boolean prettyPrint) {
-        HandlebarsViewRenderer.HANDLEBARS.setPrettyPrint(prettyPrint);
+    public void setPrettyPrint(boolean prettyPrint) {
+        viewRenderer.getHandlebars().setPrettyPrint(prettyPrint);
     }
 
     /**
      * {@link com.github.jknack.handlebars.Handlebars#setInfiniteLoops(boolean)}
      */
-    public static void setInfiniteLoops(boolean infiniteLoops) {
-        HandlebarsViewRenderer.HANDLEBARS.setInfiniteLoops(infiniteLoops);
+    public void setInfiniteLoops(boolean infiniteLoops) {
+        viewRenderer.getHandlebars().setInfiniteLoops(infiniteLoops);
     }
 }
