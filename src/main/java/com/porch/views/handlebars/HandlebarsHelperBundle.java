@@ -70,4 +70,8 @@ public abstract class HandlebarsHelperBundle<C extends Configuration> implements
     public void setInfiniteLoops(boolean infiniteLoops) {
         viewRenderer.getHandlebars().setInfiniteLoops(infiniteLoops);
     }
+
+    public HandlebarsViewRenderer getViewRenderer() {
+        return viewRenderer;
+    }
 }
