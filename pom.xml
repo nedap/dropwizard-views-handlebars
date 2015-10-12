@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.porch</groupId>
+    <groupId>com.porch.nedap</groupId>
     <artifactId>dropwizard-views-handlebars</artifactId>
     <version>${dropwizard.version}</version>
 
@@ -11,7 +11,15 @@
         <dropwizard.version>0.9.0-rc3</dropwizard.version>
         <handlebars.java.version>2.2.3</handlebars.java.version>
         <jersey.version>2.21</jersey.version>
+        <artifactory.repository.url>https://nedap.artifactoryonline.com/nedap</artifactory.repository.url>
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/nedap/dropwizard-views-handlebars.git</connection>
+        <url>https://github.com/nedap/dropwizard-views-handlebars</url>
+        <developerConnection>scm:git:git@github.com:nedap/dropwizard-views-handlebars.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <name>Dropwizard Handlebars Views</name>
 
@@ -69,18 +77,18 @@
         <url>http://github.com/mikedanese/dropwizard-views-handlebarsr</url>
     </scm>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus snapshot repository</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Sonatype Nexus release repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+  <distributionManagement>
+      <repository>
+          <uniqueVersion>false</uniqueVersion>
+          <id>nedap.artifactoryonline.com</id>
+          <url>${artifactory.repository.url}/ext-releases-local</url>
+      </repository>
+      <snapshotRepository>
+          <uniqueVersion>true</uniqueVersion>
+          <id>nedap-snapshots.artifactoryonline.com</id>
+          <url>${artifactory.repository.url}/ext-snapshots-local</url>
+      </snapshotRepository>
+  </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -169,9 +177,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.2</version>
+                <version>2.5</version>
                 <configuration>
-                    <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+                    <goals>deploy</goals>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
