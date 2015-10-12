@@ -1,0 +1,73 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.0"
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: "com.jfrog.artifactory"
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+sourceSets {
+    main { compileClasspath += [configurations.provided] }
+}
+
+def artifactoryUserMethod = hasProperty('artifactoryUser') ? artifactoryUser : ''
+def artifactoryPasswordMethod = hasProperty('artifactoryPassword') ? artifactoryPassword : ''
+
+ext.dropwizardVersion = '0.9.0-rc4'
+ext.handlebarsJavaVersion = '2.2.3'
+ext.jerseyVersion = '2.21'
+
+version = ext.dropwizardVersion
+group = 'com.porch'
+
+dependencies {
+	provided "io.dropwizard:dropwizard-views:${dropwizardVersion}"
+	compile("com.github.jknack:handlebars:${handlebarsJavaVersion}") {
+		exclude group: 'org.apache.commons', module: 'commons-lang3'
+	}
+    compile("com.github.jknack:handlebars-guava-cache:${handlebarsJavaVersion}") {
+    	exclude group: 'com.google.guava', module:'guava'
+    }
+    testCompile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jdk-http:${jerseyVersion}"
+    testCompile 'org.assertj:assertj-core:1.6.1'
+}
+
+artifactory {
+    contextUrl = 'https://nedap.artifactoryonline.com/nedap/'
+    publish {
+        repository {
+            repoKey = 'ext-releases-local'
+            username = "${artifactoryUserMethod}"
+            password = "${artifactoryPasswordMethod}"
+            maven = true
+
+        }       
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+artifactoryPublish.dependsOn 'generatePomFileForMavenJavaPublication', 'build'

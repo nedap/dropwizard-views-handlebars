@@ -71,12 +71,6 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:git://github.com/mikedanese/dropwizard-views-handlebars.git</connection>
-        <developerConnection>scm:git:git@github.com:mikedanese/dropwizard-views-handlebars.git</developerConnection>
-        <url>http://github.com/mikedanese/dropwizard-views-handlebarsr</url>
-    </scm>
-
   <distributionManagement>
       <repository>
           <uniqueVersion>false</uniqueVersion>
