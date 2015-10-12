@@ -8,7 +8,7 @@
     <version>${dropwizard.version}</version>
 
     <properties>
-        <dropwizard.version>0.9.0-rc3</dropwizard.version>
+        <dropwizard.version>0.9.0-rc4</dropwizard.version>
         <handlebars.java.version>2.2.3</handlebars.java.version>
         <jersey.version>2.21</jersey.version>
         <artifactory.repository.url>https://nedap.artifactoryonline.com/nedap</artifactory.repository.url>
