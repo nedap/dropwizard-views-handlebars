@@ -181,6 +181,7 @@
                 <configuration>
                     <goals>deploy</goals>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <pushChanges>false</pushChanges>
                 </configuration>
             </plugin>
         </plugins>
